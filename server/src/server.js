@@ -16,4 +16,4 @@ app.use(morgan('dev'));
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes); app.use('/api/courses', courseRoutes); app.use('/api/quizzes', quizRoutes); app.use('/api/events', eventRoutes); app.use('/api/analytics', analyticsRoutes);
 app.use((error, _req, res, _next) => { console.error(error); res.status(500).json({ message: 'Something went wrong.' }); });
-connectDatabase().then(() => app.listen(process.env.PORT || 5000, () => console.log('API listening'))).catch((error) => { console.error('Database connection failed:', error.message); process.exit(1); });
+connectDatabase().then(() => app.listen(process.env.PORT || 5050, () => console.log('API listening'))).catch((error) => { console.error('Database connection failed:', error.message); process.exit(1); });

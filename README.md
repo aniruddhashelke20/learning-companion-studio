@@ -22,7 +22,7 @@ React + Vite + Tailwind CSS · Node.js + Express · MongoDB + Mongoose · JWT ·
 4. Start MongoDB with `npm run db` if you want the included local Docker database. You can also use MongoDB Atlas by setting `MONGODB_URI` in `server/.env`.
 5. Populate the sample course and accounts with `npm run seed`.
 6. Start both applications with `npm run dev`.
-7. Visit `http://localhost:5173`.
+7. Visit `http://localhost:5173`. The API runs on `http://localhost:5050`.
 
 Sample accounts after seeding:
 
