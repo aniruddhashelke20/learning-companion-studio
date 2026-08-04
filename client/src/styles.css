@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #1e293b; }
+a.active { color: #2563eb; font-weight: 600; }
