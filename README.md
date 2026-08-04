@@ -16,12 +16,13 @@ React + Vite + Tailwind CSS · Node.js + Express · MongoDB + Mongoose · JWT ·
 
 ## Run locally
 
-1. Install [Node.js 20+](https://nodejs.org/) and start MongoDB locally (or create a MongoDB Atlas database).
+1. Install [Node.js 20+](https://nodejs.org/).
 2. Copy `server/.env.example` to `server/.env`, then set `MONGODB_URI` and a strong `JWT_SECRET`.
 3. From the repository root, run `npm install`.
-4. Populate the sample course and accounts with `npm run seed`.
-5. Start both applications with `npm run dev`.
-6. Visit `http://localhost:5173`.
+4. Start MongoDB with `npm run db` if you want the included local Docker database. You can also use MongoDB Atlas by setting `MONGODB_URI` in `server/.env`.
+5. Populate the sample course and accounts with `npm run seed`.
+6. Start both applications with `npm run dev`.
+7. Visit `http://localhost:5173`.
 
 Sample accounts after seeding:
 
@@ -45,3 +46,14 @@ git push -u origin main
 ```
 
 Use the suggested commit sequence in `docs/COMMIT_PLAN.md` if presenting development history is required.
+
+## Troubleshooting
+
+If seeding fails with `ECONNREFUSED 127.0.0.1:27017`, MongoDB is not running. Start the included database with:
+
+```bash
+npm run db
+npm run seed
+```
+
+If Docker is not available, use MongoDB Atlas and update `MONGODB_URI` in `server/.env`.
