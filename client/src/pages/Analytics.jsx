@@ -40,14 +40,8 @@ export default function Analytics() {
         metadata: { format: 'csv' }
       });
       
-      const token = localStorage.getItem('learnlog_token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5050/api'}/analytics/export`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      const blob = await response.blob();
+      const response = await api.get('/analytics/export', { responseType: 'blob' });
+      const blob = response.data;
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
