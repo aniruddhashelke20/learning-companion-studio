@@ -33,8 +33,25 @@ router.get('/overview', protect, adminOnly, async (req, res, next) => {
 
 router.get('/export', protect, adminOnly, async (req, res, next) => {
   try {
+    const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+    
+    if (webhookUrl) {
+      try {
+        const response = await fetch(webhookUrl);
+        if (response.ok) {
+          const csvText = await response.text();
+          res.setHeader('Content-Type', 'text/csv');
+          res.setHeader('Content-Disposition', `attachment; filename=clickstream_export_${Date.now()}.csv`);
+          return res.status(200).send(csvText);
+        }
+      } catch (err) {
+        console.error('Failed to fetch CSV from Google Sheet Webhook:', err.message);
+      }
+    }
+
+    // Fallback: Generate CSV from MongoDB database directly (matching Google Sheets structure)
     const events = await Event.find().sort('-createdAt').populate('userId', 'name email');
-    let csv = 'Timestamp,Event ID,User ID,User Name,User Email,Event Name,Component,Event Context,Origin,Description,Resource Type,Resource ID\n';
+    let csv = 'Timestamp,Event ID,User ID,User Name,User Email,Event Name,Component,Event Context,Origin,IP Address,Description,Resource Type,Resource ID,Metadata\n';
     
     for (const e of events) {
       const escape = (val) => {
@@ -43,7 +60,7 @@ router.get('/export', protect, adminOnly, async (req, res, next) => {
         return `"${str}"`;
       };
       
-      csv += `${escape(e.createdAt?.toISOString())},${escape(e._id)},${escape(e.userId?._id)},${escape(e.userId?.name)},${escape(e.userId?.email)},${escape(e.eventName)},${escape(e.component)},${escape(e.eventContext)},${escape(e.origin)},${escape(e.description)},${escape(e.resourceType)},${escape(e.resourceId)}\n`;
+      csv += `${escape(e.createdAt?.toISOString())},${escape(e._id)},${escape(e.userId?._id)},${escape(e.userId?.name)},${escape(e.userId?.email)},${escape(e.eventName)},${escape(e.component)},${escape(e.eventContext)},${escape(e.origin)},${escape(e.ipAddress)},${escape(e.description)},${escape(e.resourceType)},${escape(e.resourceId)},${escape(JSON.stringify(e.metadata))}\n`;
     }
     
     res.setHeader('Content-Type', 'text/csv');

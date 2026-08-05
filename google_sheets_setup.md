@@ -65,6 +65,30 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
+
+// Support downloading the actual Google Sheet contents as a CSV
+function doGet(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = sheet.getDataRange().getValues();
+    var csv = "";
+    
+    for (var i = 0; i < data.length; i++) {
+      var row = [];
+      for (var j = 0; j < data[i].length; j++) {
+        var val = String(data[i][j]).replace(/"/g, '""');
+        row.push('"' + val + '"');
+      }
+      csv += row.join(",") + "\n";
+    }
+    
+    return ContentService.createTextOutput(csv)
+      .setMimeType(ContentService.MimeType.TEXT);
+  } catch (err) {
+    return ContentService.createTextOutput("Error: " + err.toString())
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+}
 ```
 
 3. Click the **Save** icon (diskette) at the top of the editor.
