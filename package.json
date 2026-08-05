@@ -5,6 +5,7 @@
   "workspaces": ["client", "server"],
   "scripts": {
     "db": "docker compose up -d mongo",
+    "predev": "npx -y kill-port 5050 || true",
     "dev": "concurrently \"npm run dev --workspace client\" \"npm run dev --workspace server\"",
     "build": "npm run build --workspace client",
     "start": "npm run start --workspace server",
