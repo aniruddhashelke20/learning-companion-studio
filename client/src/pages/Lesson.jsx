@@ -10,6 +10,7 @@ export default function Lesson() {
   const [data, setData] = useState(null);
   const [courseDetails, setCourseDetails] = useState(null);
   const scrolled = useRef(false);
+  const lesson = data?.lesson;
 
   // Fetch current lesson data
   useEffect(() => {
@@ -28,14 +29,14 @@ export default function Lesson() {
   useEffect(() => {
     scrolled.current = false; // Fix: Reset scrolled state for new lesson
     
-    if (!data?.lesson) return;
+    if (!lesson) return;
 
     const onScroll = () => {
       if (!scrolled.current && window.scrollY > 150) {
         scrolled.current = true;
         track('LESSON_SCROLLED', {
           component: 'Lesson',
-          eventContext: data.lesson.title,
+          eventContext: lesson.title,
           resourceType: 'lesson',
           resourceId: lessonId,
           metadata: { depth: '150px' }
@@ -45,42 +46,11 @@ export default function Lesson() {
 
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [data, lessonId]);
+  }, [lesson, lessonId]);
 
-  if (data?.error) {
-    return (
-      <Layout>
-        <div className="text-center py-12">
-          <AlertCircle className="mx-auto text-rose-500 mb-4" size={40} />
-          <h2 className="text-xl font-bold">Lesson not found</h2>
-          <Link to="/" className="text-brand dark:text-indigo-400 mt-4 inline-block hover:underline">
-            Go back to dashboard
-          </Link>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (!data || !courseDetails) {
-    return (
-      <Layout>
-        <div className="flex h-64 items-center justify-center">
-          <p className="text-slate-500 dark:text-slate-400 animate-pulse font-medium">Loading lesson…</p>
-        </div>
-      </Layout>
-    );
-  }
-
-  const { lesson } = data;
-  const lessonsList = courseDetails.lessons || [];
-  
-  // Find current index and navigation options
-  const currentIndex = lessonsList.findIndex((l) => l._id === lessonId);
-  const prevLesson = currentIndex > 0 ? lessonsList[currentIndex - 1] : null;
-  const nextLesson = currentIndex < lessonsList.length - 1 ? lessonsList[currentIndex + 1] : null;
-  
   // Track video interactions
   const handleVideoPlay = () => {
+    if (!lesson) return;
     track('VIDEO_PLAYED', {
       component: 'VideoPlayer',
       eventContext: lesson.title,
@@ -91,6 +61,7 @@ export default function Lesson() {
   };
 
   const handleVideoPause = () => {
+    if (!lesson) return;
     track('VIDEO_PAUSED', {
       component: 'VideoPlayer',
       eventContext: lesson.title,
@@ -101,6 +72,7 @@ export default function Lesson() {
   };
 
   const handleVideoEnded = () => {
+    if (!lesson) return;
     track('VIDEO_COMPLETED', {
       component: 'VideoPlayer',
       eventContext: lesson.title,
@@ -111,6 +83,7 @@ export default function Lesson() {
   };
 
   const handleVideoSeek = (e) => {
+    if (!lesson) return;
     track('VIDEO_SEEKED', {
       component: 'VideoPlayer',
       eventContext: lesson.title,
@@ -166,6 +139,37 @@ export default function Lesson() {
       }
     };
   }, [lesson, lessonId]);
+
+  if (data?.error) {
+    return (
+      <Layout>
+        <div className="text-center py-12">
+          <AlertCircle className="mx-auto text-rose-500 mb-4" size={40} />
+          <h2 className="text-xl font-bold">Lesson not found</h2>
+          <Link to="/" className="text-brand dark:text-indigo-400 mt-4 inline-block hover:underline">
+            Go back to dashboard
+          </Link>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!data || !courseDetails) {
+    return (
+      <Layout>
+        <div className="flex h-64 items-center justify-center">
+          <p className="text-slate-500 dark:text-slate-400 animate-pulse font-medium">Loading lesson…</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  const lessonsList = courseDetails.lessons || [];
+  
+  // Find current index and navigation options
+  const currentIndex = lessonsList.findIndex((l) => l._id === lessonId);
+  const prevLesson = currentIndex > 0 ? lessonsList[currentIndex - 1] : null;
+  const nextLesson = currentIndex < lessonsList.length - 1 ? lessonsList[currentIndex + 1] : null;
 
   return (
     <Layout>
