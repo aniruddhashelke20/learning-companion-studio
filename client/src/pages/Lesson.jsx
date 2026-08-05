@@ -109,20 +109,21 @@ export default function Lesson() {
 
     let player;
     const initPlayer = () => {
-      player = new window.YT.Player('youtube-player', {
-        events: {
-          onStateChange: (event) => {
-            // event.data states: PLAYING (1), PAUSED (2), ENDED (0)
-            if (event.data === window.YT.PlayerState.PLAYING) {
-              handleVideoPlay();
-            } else if (event.data === window.YT.PlayerState.PAUSED) {
-              handleVideoPause();
-            } else if (event.data === window.YT.PlayerState.ENDED) {
-              handleVideoEnded();
-            }
+      try {
+        player = new window.YT.Player('youtube-player');
+        player.addEventListener('onStateChange', (event) => {
+          // event.data states: PLAYING (1), PAUSED (2), ENDED (0)
+          if (event.data === window.YT.PlayerState.PLAYING) {
+            handleVideoPlay();
+          } else if (event.data === window.YT.PlayerState.PAUSED) {
+            handleVideoPause();
+          } else if (event.data === window.YT.PlayerState.ENDED) {
+            handleVideoEnded();
           }
-        }
-      });
+        });
+      } catch (e) {
+        console.error('YouTube player binding failed:', e);
+      }
     };
 
     // If API ready, initialize directly
