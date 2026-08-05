@@ -1,2 +1,2 @@
 /** @type {import('tailwindcss').Config} */
-export default { content: ['./index.html', './src/**/*.{js,jsx}'], theme: { extend: { colors: { ink: '#10233f', brand: '#2563eb' } } }, plugins: [] };
+export default { darkMode: 'class', content: ['./index.html', './src/**/*.{js,jsx}'], theme: { extend: { colors: { ink: '#10233f', brand: '#2563eb' } } }, plugins: [] };
