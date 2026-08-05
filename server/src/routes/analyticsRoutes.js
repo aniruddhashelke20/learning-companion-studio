@@ -31,25 +31,24 @@ router.get('/overview', protect, adminOnly, async (req, res, next) => {
   }
 });
 
+router.get('/export-config', protect, adminOnly, async (req, res, next) => {
+  try {
+    const sheetId = process.env.GOOGLE_SHEET_ID;
+    if (sheetId) {
+      res.json({
+        googleSheetUrl: `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`
+      });
+    } else {
+      res.json({ googleSheetUrl: null });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.get('/export', protect, adminOnly, async (req, res, next) => {
   try {
-    const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
-    
-    if (webhookUrl) {
-      try {
-        const response = await fetch(webhookUrl);
-        if (response.ok) {
-          const csvText = await response.text();
-          res.setHeader('Content-Type', 'text/csv');
-          res.setHeader('Content-Disposition', `attachment; filename=clickstream_export_${Date.now()}.csv`);
-          return res.status(200).send(csvText);
-        }
-      } catch (err) {
-        console.error('Failed to fetch CSV from Google Sheet Webhook:', err.message);
-      }
-    }
-
-    // Fallback: Generate CSV from MongoDB database directly (matching Google Sheets structure)
+    // Generate CSV from MongoDB database directly (matching Google Sheets structure)
     const events = await Event.find().sort('-createdAt').populate('userId', 'name email');
     let csv = 'Timestamp,Event ID,User ID,User Name,User Email,Event Name,Component,Event Context,Origin,IP Address,Description,Resource Type,Resource ID,Metadata\n';
     

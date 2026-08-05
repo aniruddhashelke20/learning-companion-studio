@@ -40,15 +40,24 @@ export default function Analytics() {
         metadata: { format: 'csv' }
       });
       
-      const response = await api.get('/analytics/export', { responseType: 'blob' });
-      const blob = response.data;
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `learnlog_clickstream_${Date.now()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      const { data } = await api.get('/analytics/export-config');
+      
+      if (data && data.googleSheetUrl) {
+        // If Google Sheet is configured, open the export link directly in a new tab.
+        // This leverages the user's browser Google session and bypasses CORS and anti-bot issues.
+        window.open(data.googleSheetUrl, '_blank');
+      } else {
+        // Fallback: download generated CSV from DB
+        const response = await api.get('/analytics/export', { responseType: 'blob' });
+        const blob = response.data;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `learnlog_clickstream_${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
     } catch (e) {
       console.error('CSV Export failed:', e);
     }
