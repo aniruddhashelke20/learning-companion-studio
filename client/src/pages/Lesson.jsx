@@ -135,9 +135,8 @@ export default function Lesson() {
     }
 
     return () => {
-      if (player && typeof player.destroy === 'function') {
-        player.destroy();
-      }
+      // Do not call player.destroy() because it physically deletes the <iframe> DOM node,
+      // which breaks React's virtual DOM reconciliation when navigating between lessons.
     };
   }, [lesson, lessonId]);
 
