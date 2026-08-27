@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Companion Studio - EduGrid Edition</title>
+  
+  <!-- Canva / oEmbed / Social Crawler Metadata -->
+  <meta property="og:title" content="Learning Companion Studio - EduGrid">
+  <meta property="og:description" content="IMLC Top-Navigation & Card Grid UI Layout Option">
+  <meta property="og:type" content="website">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --primary: #0284C7;
+      --primary-hover: #0369A1;
+      --primary-light: #F0F9FF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    
+    .dark {
+      --bg: #0F172A;
+      --card-bg: #1E293B;
+      --border: #334155;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --primary: #38BDF8;
+      --primary-hover: #7DD3FC;
+      --primary-light: #0C4A6E;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 16px -6px rgba(0, 0, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    .glass-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .page {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .page:not(.active) {
+      display: none !important;
+    }
+    
+    .top-nav-btn {
+      position: relative;
+      padding: 0.5rem 0.25rem;
+    }
+    
+    .top-nav-btn.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .top-nav-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 9999px;
+    }
+    
+    .progress-track {
+      background-color: #E2E8F0;
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .dark .progress-track {
+      background-color: #334155;
+    }
+    .progress-fill {
+      background-color: var(--primary);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+
+  <!-- ================= TOP NAVIGATION HEADER ================= -->
+  <header id="app-header" class="hidden sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-sky-600 flex items-center justify-center text-white shadow-sm">
+        <i data-lucide="award" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <span class="font-extrabold text-sm tracking-tight text-slate-800 dark:text-white uppercase block">IMLC Studio</span>
+        <span class="text-xxs text-slate-400 dark:text-slate-500 uppercase font-semibold">EduGrid Edition</span>
+      </div>
+    </div>
+    
+    <!-- Top Horizontal Links -->
+    <nav class="hidden md:flex items-center gap-8">
+      <button onclick="navigateTo('dashboard')" id="top-nav-dashboard" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Dashboard</button>
+      <button onclick="navigateTo('reader')" id="top-nav-reader" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Reading Room</button>
+      <button onclick="navigateTo('quiz')" id="top-nav-quiz" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Knowledge Check</button>
+      <button onclick="navigateTo('diary')" id="top-nav-diary" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Diary</button>
+      <button onclick="navigateTo('mentor')" id="top-nav-mentor" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Mentor Registry</button>
+      <button onclick="navigateTo('library')" id="top-nav-library" class="top-nav-btn text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-600 transition">Author Desk</button>
+    </nav>
+    
+    <div class="flex items-center gap-4">
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
+        <i data-lucide="moon" class="w-4 h-4 dark-icon"></i>
+      </button>
+      
+      <!-- User Profile Dropdown Widget -->
+      <div class="flex items-center gap-2.5 border-l border-slate-200 dark:border-slate-800 pl-4">
+        <div id="user-avatar" class="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-400 font-extrabold flex items-center justify-center text-xs">P</div>
+        <div class="hidden sm:block text-left">
+          <span id="user-name-label" class="text-xs font-bold text-slate-700 dark:text-slate-200 block leading-tight">Priya Sharma</span>
+          <span id="user-role-badge" class="text-xxs text-slate-400 dark:text-slate-550 block font-semibold">Trainee</span>
+        </div>
+        <button onclick="logout()" class="w-8 h-8 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 text-slate-400 hover:text-red-500 flex items-center justify-center transition">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-grow">
+    
+    <!-- 1. PORTAL VIEW (CENTERED HERO DESIGN) -->
+    <section id="portal-view" class="page min-h-[calc(100vh-100px)] flex flex-col justify-center items-center py-16 px-4">
+      <div class="max-w-4xl w-full text-center space-y-12">
+        <!-- Hero Section -->
+        <div class="space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-100 dark:border-sky-900/10">
+            <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            <span class="text-xxs font-bold uppercase tracking-wider">InclusiveMinds Collective</span>
+          </div>
+          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+            Learning Companion <span class="text-sky-600 dark:text-sky-450">Studio</span>
+          </h1>
+          <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Welcome to the IMLC portal. This workspace is designed for companions to complete their training modules, log session evaluations, and communicate with program supervisors.
+          </p>
+        </div>
+
+        <!-- 3 Horizontal Grid Cards for Login -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Quick Access: Choose Your Workspace</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center space-y-4 hover:shadow-lg transition bg-white dark:bg-slate-800">
+              <div class="w-12 h-12 rounded-full bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200">Companion Portal</h3>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Read modules, submit diary reflections, and take quizzes.</p>
+              </div>
+              <button onclick="loginAs('priya')" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition">Enter Dashboard</button>
+            </div>
+            <!-- Card 2 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center space-y-4 hover:shadow-lg transition bg-white dark:bg-slate-800">
+              <div class="w-12 h-12 rounded-full bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200">Mentor Supervisory Hub</h3>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Track LC learning progress and review submitted reflection logs.</p>
+              </div>
+              <button onclick="loginAs('siddharth')" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition">Supervise Registry</button>
+            </div>
+            <!-- Card 3 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center space-y-4 hover:shadow-lg transition bg-white dark:bg-slate-800">
+              <div class="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <i data-lucide="folder-up" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200">Content Author Desk</h3>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Upload and publish new learning paths, texts, and resources.</p>
+              </div>
+              <button onclick="loginAs('aditi')" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition">Publish Studio</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400 dark:text-slate-500">
+          Need to join as a volunteer? <a href="#" onclick="navigateTo('signup')" class="text-sky-600 dark:text-sky-400 font-bold hover:underline">Register Profile</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. SIGNUP VIEW (CENTERED CARD DESIGN) -->
+    <section id="signup-view" class="page min-h-[calc(100vh-100px)] flex flex-col justify-center items-center py-16 px-4">
+      <div class="max-w-md w-full glass-card rounded-3xl p-8 bg-white dark:bg-slate-800">
+        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Volunteer Registry</h2>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-6">Create a profile to begin your learning companion onboarding.</p>
+        
+        <form onsubmit="handleSignup(event)" class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Full Name</label>
+            <input type="text" id="reg-name" required placeholder="e.g. Priya Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white">
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Email Address</label>
+            <input type="email" id="reg-email" required placeholder="e.g. priya@imlc.org" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white">
+          </div>
+          <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition shadow-sm">Submit Registration</button>
+        </form>
+        
+        <button onclick="navigateTo('portal')" class="w-full mt-4 text-xs text-slate-500 dark:text-slate-400 hover:underline">Back to Login</button>
+      </div>
+    </section>
+
+    <!-- 3. COMPANION DASHBOARD VIEW (COURSE CARDS GRID) -->
+    <section id="page-dashboard" class="page max-w-6xl mx-auto px-6 py-10 space-y-10">
+      <!-- Welcome Header Banner -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
+        <div>
+          <h2 class="text-2xl font-black text-slate-800 dark:text-white">Companion Dashboard</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500">Track and complete your volunteer onboarding modules.</p>
+        </div>
+        
+        <!-- Tab Selector: Basic / Advanced -->
+        <div class="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 self-start">
+          <button id="tab-basic" onclick="setDashboardTab('basic')" class="tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition">Basic Track</button>
+          <button id="tab-advanced" onclick="setDashboardTab('advanced')" class="tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition">Advanced Track</button>
+        </div>
+      </div>
+
+      <!-- Main Layout: Grid structure -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Columns: Course Cards Grid -->
+        <div class="lg:col-span-2 space-y-6">
+          <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Active Curriculum</h3>
+          <div id="module-checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Dynamic Module Cards loaded here -->
+          </div>
+        </div>
+        
+        <!-- Right Column: Progress & Feedback widgets -->
+        <div class="space-y-8">
+          <!-- Widget 1: Radial Progress Card -->
+          <div class="glass-card rounded-2xl p-6 space-y-5 bg-white dark:bg-slate-800 text-center">
+            <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Onboarding Progress</h3>
+            
+            <div class="relative w-36 h-36 mx-auto flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90">
+                <circle cx="72" cy="72" r="60" stroke="#E2E8F0" stroke-width="8" fill="transparent" class="dark:stroke-slate-700" />
+                <circle id="progress-circle" cx="72" cy="72" r="60" stroke="var(--primary)" stroke-width="8" fill="transparent" stroke-dasharray="377" stroke-dashoffset="150" stroke-linecap="round" />
+              </svg>
+              <div class="absolute text-center">
+                <span id="progress-text" class="text-3xl font-black text-slate-800 dark:text-white">40%</span>
+                <span class="text-xxs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold mt-0.5">Complete</span>
+              </div>
+            </div>
+            <p id="progress-description" class="text-xs text-slate-500 dark:text-slate-400">You have completed 2 out of 5 modules.</p>
+          </div>
+
+          <!-- Widget 2: Supervisor Feedback Box -->
+          <div class="glass-card rounded-2xl p-6 space-y-4 bg-gradient-to-br from-indigo-50/30 to-sky-50/30 dark:from-indigo-950/20 dark:to-sky-950/20 border border-sky-100/20 dark:border-sky-900/20">
+            <div class="flex items-center gap-2">
+              <i data-lucide="message-square" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
+              <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Recent Supervisor Feedback</span>
+            </div>
+            <p id="dashboard-feedback-text" class="text-xs text-slate-500 dark:text-slate-400 italic">"No journal feedbacks published yet. Complete field reflections in the diary tab."</p>
+            <span id="dashboard-feedback-author" class="text-xxs text-slate-400 dark:text-slate-550 block font-bold">— Program Director</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MODULE READER ROOM -->
+    <section id="page-reader" class="page max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-6">
+        <div>
+          <span id="reader-module-category" class="text-xxs font-extrabold text-sky-600 dark:text-sky-400 uppercase tracking-widest block">Basic Module</span>
+          <h2 id="reader-unit-title" class="text-2xl font-black text-slate-800 dark:text-white mt-1">Unit Title</h2>
+        </div>
+        <button onclick="navigateTo('dashboard')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold flex items-center gap-2 transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Dashboard
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Reader Navigation Column -->
+        <div class="lg:col-span-3 glass-card rounded-2xl p-5 bg-white dark:bg-slate-800 space-y-4">
+          <span class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Module Curriculum</span>
+          <div id="reader-unit-links" class="space-y-1">
+            <!-- Dynamic unit navigation buttons -->
+          </div>
+        </div>
+
+        <!-- Main text viewer -->
+        <div class="lg:col-span-9 glass-card rounded-2xl p-8 bg-white dark:bg-slate-800 space-y-6">
+          <div id="reader-unit-body" class="prose dark:prose-invert max-w-none text-sm text-slate-600 dark:text-slate-300 leading-relaxed space-y-4">
+            <!-- Dynamic Unit Body text goes here -->
+          </div>
+          
+          <div class="border-t border-slate-100 dark:border-slate-700 pt-6 flex items-center justify-between">
+            <button onclick="navigateTo('quiz')" class="px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+              Take Knowledge Check <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ CHECKPOINT -->
+    <section id="page-quiz" class="page max-w-3xl mx-auto px-6 py-12">
+      <!-- Quiz Frame -->
+      <div id="quiz-card" class="glass-card rounded-3xl p-8 bg-white dark:bg-slate-800 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-4">
+          <span id="quiz-question-number" class="text-xs font-bold text-slate-400 dark:text-slate-550 uppercase">Question 1 of 5</span>
+          <div class="flex items-center gap-2">
+            <span id="quiz-progress-text" class="text-xxs font-bold text-sky-600">0% Complete</span>
+            <div class="w-20 bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+              <div id="quiz-progress-bar" class="bg-sky-600 h-full" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <h3 id="quiz-question-text" class="text-lg font-bold text-slate-800 dark:text-white leading-snug">Question text goes here?</h3>
+        
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Options rendered dynamically -->
+        </div>
+
+        <div id="quiz-feedback" class="hidden p-4 rounded-xl text-xs font-medium"></div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+          <button onclick="navigateTo('dashboard')" class="text-xs font-bold text-slate-500 hover:underline">Cancel</button>
+          <button id="quiz-submit-btn" onclick="submitAnswer()" class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition">Submit Answer</button>
+          <button id="quiz-next-btn" onclick="nextQuestion()" class="hidden px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">Next Question <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="quiz-result-card" class="hidden glass-card rounded-3xl p-8 bg-white dark:bg-slate-800 text-center space-y-6">
+        <div class="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+          <i data-lucide="award" class="w-8 h-8"></i>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-2xl font-black text-slate-800 dark:text-white">Knowledge Check Complete!</h2>
+          <p id="quiz-final-score" class="text-3xl font-black text-sky-600 mt-2">Score: 4 / 5</p>
+          <p class="text-xs text-slate-400 dark:text-slate-500">Your score has been logged. Review modules or proceed to your reflection log.</p>
+        </div>
+        <div class="flex items-center justify-center gap-4">
+          <button onclick="restartQuiz()" class="px-5 py-2.5 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold rounded-xl transition">Retake Quiz</button>
+          <button onclick="navigateTo('diary')" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold rounded-xl transition shadow-sm">Write Reflection</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. REFLECTION DIARY VIEW -->
+    <section id="page-diary" class="page max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-6">
+        <h2 class="text-2xl font-black text-slate-800 dark:text-white">Reflection Diary</h2>
+        <p class="text-xs text-slate-400 dark:text-slate-500">Log evaluations and write details of your field experiences for review.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Past Logs List (Left) -->
+        <div class="lg:col-span-4 glass-card rounded-2xl p-5 bg-white dark:bg-slate-800 space-y-4">
+          <span class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Saved Journals</span>
+          <div id="reflection-list" class="space-y-3">
+            <!-- Dynamic Reflections list here -->
+          </div>
+        </div>
+
+        <!-- Markdown Editor Panel (Right) -->
+        <div class="lg:col-span-8 glass-card rounded-2xl p-6 bg-white dark:bg-slate-800 space-y-6">
+          <form onsubmit="handleSaveReflection(event)" class="space-y-4">
+            <div class="space-y-1.5">
+              <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Reflection Title</label>
+              <input type="text" id="ref-title" required placeholder="e.g. Session 3: Pathway Discovery" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white">
+            </div>
+            
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Journal Entry</label>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="insertFormat('**')" class="px-2 py-0.5 rounded bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 dark:hover:bg-slate-700 text-xxs font-bold">B</button>
+                  <button type="button" onclick="insertFormat('*')" class="px-2 py-0.5 rounded bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 dark:hover:bg-slate-700 text-xxs font-bold">I</button>
+                  <button type="button" onclick="insertFormat('"')" class="px-2 py-0.5 rounded bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 dark:hover:bg-slate-700 text-xxs font-bold">"</button>
+                </div>
+              </div>
+              <textarea id="ref-body" required rows="8" placeholder="Discuss pacing, active pause times, co-creation moments..." class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white leading-relaxed"></textarea>
+            </div>
+            
+            <div class="flex items-center justify-end gap-3 pt-2">
+              <button type="button" onclick="loadDiary()" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:underline">Clear</button>
+              <button type="submit" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold rounded-xl transition shadow-sm">Save & Submit Reflection</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. MENTOR SUPERVISORY HUB VIEW -->
+    <section id="page-mentor" class="page max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
+        <div>
+          <h2 class="text-2xl font-black text-slate-800 dark:text-white">Mentor Supervisory Hub</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500">Track and review companion curriculum completions.</p>
+        </div>
+        <div class="relative max-w-xs w-full">
+          <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+          <input type="text" oninput="filterRegistry(event)" placeholder="Search companion name..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-sky-500 focus:outline-none dark:text-white">
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-5 bg-sky-50/20 dark:bg-sky-950/20 border border-sky-100/20 dark:border-sky-900/20 dark:bg-slate-800 dark:border-slate-700">
+          <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase">Active Companions</span>
+          <p id="mentor-stat-active-companions" class="text-3xl font-black text-sky-600 dark:text-sky-400 mt-2">15</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5 bg-purple-50/20 dark:bg-purple-950/20 border border-purple-100/20 dark:border-purple-900/20 dark:bg-slate-800 dark:border-slate-700">
+          <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase">Average LC Progress</span>
+          <p id="mentor-stat-average-progress" class="text-3xl font-black text-purple-600 dark:text-purple-400 mt-2">71%</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5 bg-amber-50/20 dark:bg-amber-950/20 border border-amber-100/20 dark:border-amber-900/20 dark:bg-slate-800 dark:border-slate-700">
+          <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase">Unreviewed Reflections</span>
+          <p id="mentor-stat-unreviewed" class="text-3xl font-black text-amber-600 dark:text-amber-400 mt-2">6</p>
+        </div>
+      </div>
+
+      <!-- Trainees Table -->
+      <div class="glass-card rounded-2xl bg-white dark:bg-slate-800 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50/70 dark:bg-slate-700/30 text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-700">
+                <th class="py-4 px-6">Companion Name</th>
+                <th class="py-4">Progress</th>
+                <th class="py-4">Quiz Score</th>
+                <th class="py-4">Recent Reflection</th>
+                <th class="py-4 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="mentor-table-body" class="text-xs text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-700">
+              <!-- Dynamically populated table rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. CONTENT LIBRARY UPLOAD PANEL -->
+    <section id="page-library" class="page max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-6">
+        <div>
+          <h2 class="text-2xl font-black text-slate-800 dark:text-white">Content Creation Desk</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500">Draft, format, and publish curriculum modules for volunteer trainees.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Left Panel: Formatting Guidelines -->
+        <div class="lg:col-span-4 glass-card rounded-2xl p-6 bg-white dark:bg-slate-800 space-y-4">
+          <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Publishing Guidelines</h3>
+          <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p><strong>Step 1:</strong> Select the curriculum difficulty track (Basic Onboarding or Advanced Field Track).</p>
+            <p><strong>Step 2:</strong> Add a descriptive, clear module header and insert the core text study guidelines.</p>
+            <p><strong>Step 3:</strong> Optional. Drag and drop any accompanying PDF manuals or reference resources.</p>
+            <p><strong>Step 4:</strong> Click Publish. The lesson is immediately active and added to trainee checklists.</p>
+          </div>
+        </div>
+
+        <!-- Right Panel: Lesson Creator Form -->
+        <div class="lg:col-span-8 glass-card rounded-2xl p-6 bg-white dark:bg-slate-800">
+          <form onsubmit="handlePublishModule(event)" class="space-y-5">
+            <div class="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 self-start max-w-xs">
+              <button type="button" id="upload-basic-tab" onclick="setUploadCategory('basic')" class="upload-tab px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition">Basic Track</button>
+              <button type="button" id="upload-advanced-tab" onclick="setUploadCategory('advanced')" class="upload-tab px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition">Advanced Track</button>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Module Title</label>
+              <input type="text" id="up-title" required placeholder="e.g. Module 3: Active Listening Exercises" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white">
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xxs font-bold text-slate-400 dark:text-slate-500 uppercase">Lesson Content</label>
+              <textarea id="up-body" required rows="7" placeholder="Insert learning text, exercise logs, check-in instructions..." class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-sm focus:border-sky-500 focus:outline-none dark:text-white leading-relaxed"></textarea>
+            </div>
+
+            <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 text-center hover:border-sky-500 transition cursor-pointer relative">
+              <input type="file" onchange="handleFileSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+              <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
+              <span id="upload-file-label" class="text-xs font-semibold text-slate-500 dark:text-slate-400 block">Drag and drop file here (Max 50MB)</span>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-700 pt-4">
+              <button type="submit" class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold rounded-xl transition shadow-sm">Publish Module</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MENTOR REVIEW DIARY JOURNAL MODAL ================= -->
+  <div id="reflection-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="glass-card rounded-3xl p-8 max-w-xl w-full bg-white dark:bg-slate-800 space-y-6 animate-fadeIn relative">
+      <div class="flex items-center justify-between">
+        <h2 id="modal-lc-name" class="text-lg font-black text-slate-800 dark:text-white">Review Journal: Priya Sharma</h2>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-slate-400">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <span id="modal-status" class="text-xxs font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400 border border-amber-100 dark:border-amber-900/10">Pending</span>
+          <span id="modal-ref-date" class="text-xxs text-slate-400 dark:text-slate-500">Aug 18, 2026</span>
+        </div>
+        <h3 id="modal-ref-title" class="text-base font-bold text-slate-800 dark:text-white">Reflection: Module 2 Active Listening</h3>
+        <p id="modal-ref-body" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-850 p-4 rounded-xl italic">
+          "Practiced active pauses during my third session."
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-xxs font-bold text-slate-400 dark:text-slate-550 uppercase">Add Mentor Feedback</label>
+        <textarea id="modal-feedback-input" rows="3" placeholder="Type your advice and comments for the Learning Companion here..." class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-xs focus:border-sky-500 focus:outline-none dark:text-white leading-relaxed"></textarea>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeModal()" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:underline">Cancel</button>
+        <button onclick="submitReview()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-sm">Approve & Send Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOAST BANNER NOTIFICATION ================= -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 translate-y-20 opacity-0 transition duration-300 flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl text-xs font-bold border border-slate-800 dark:border-slate-100">
+    <div id="toast-icon"></div>
+    <span id="toast-text">Toast notification</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT STATE ENGINE ================= -->
+  <script>
+    // State storage
+    const appState = {
+      activeRole: 'companion', // 'companion', 'mentor', 'author'
+      activeUser: null,        // userId key
+      activeTab: 'basic',      // 'basic', 'advanced'
+      uploadCategory: 'basic', // 'basic', 'advanced'
+      selectedUnitId: null,
+      selectedRefId: null,
+      
+      companions: [
+        { name: "Priya Sharma", progress: 40, quizScore: "8/10", lastReflection: "Practiced active pauses during my session.", category: "Basic", reflectionTitle: "Reflection: Module 2 Active Listening", reflectionBody: "Practiced active pauses during my third session. The child spoke more in-depth and expanded on his drawing ideas.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Rohan Shah", progress: 64, quizScore: "7/10", lastReflection: "I want to practice open questions.", category: "Basic", reflectionTitle: "Reflection: Module 2 Open Questions", reflectionBody: "Tried using open-ended questions like 'How did you build this?' instead of closed questions.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Meera Joshi", progress: 80, quizScore: "9/10", lastReflection: "I noticed the value of silence.", category: "Advanced", reflectionTitle: "Reflection: Active Silence practice", reflectionBody: "I noticed that remaining silent for a few seconds helped the child elaborate.", reflectionStatus: "Approved", reflectionFeedback: "Excellent observations on child pacing." },
+        { name: "Amit Patel", progress: 100, quizScore: "10/10", lastReflection: "Completed advanced onboarding modules.", category: "Advanced", reflectionTitle: "Reflection: Discovery Phase Review", reflectionBody: "Completed advanced onboarding modules. The child Discovery phase is key to interest mapping.", reflectionStatus: "Approved", reflectionFeedback: "Perfect application of discovery guidelines." },
+        { name: "Emily Chen", progress: 20, quizScore: "6/10", lastReflection: "Understanding IMLC core values.", category: "Basic", reflectionTitle: "Reflection: Module 1 Welcome values", reflectionBody: "I tried the welcome techniques but faced some initial hesitation from the child.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Liam Rodriguez", progress: 50, quizScore: "8/10", lastReflection: "Practiced check-in techniques.", category: "Basic", reflectionTitle: "Reflection: Session Check-ins", reflectionBody: "Practiced check-in questions in our Spark session today. They worked very well.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Sarah Jenkins", progress: 90, quizScore: "9/10", lastReflection: "Drafting the pathway discovery guide.", category: "Advanced", reflectionTitle: "Reflection: Mapped programming pathway", reflectionBody: "Drafting the discovery pathway based on the child's coding interests. Made progress.", reflectionStatus: "Approved", reflectionFeedback: "Good work co-creating interests." },
+        { name: "David Kim", progress: 30, quizScore: "7/10", lastReflection: "Module 1 review complete.", category: "Basic", reflectionTitle: "Reflection: Onboarding Review", reflectionBody: "Module 1 review is complete. Ready to begin field observation next week.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Ananya Iyer", progress: 75, quizScore: "8/10", lastReflection: "Reflected on active silence unit.", category: "Advanced", reflectionTitle: "Reflection: Silence block evaluation", reflectionBody: "Reflected on the active silence unit. Very helpful for introverted students.", reflectionStatus: "Approved", reflectionFeedback: "Thoughtful connection to learner styles." },
+        { name: "Marcus Aurelius", progress: 100, quizScore: "10/10", lastReflection: "Completed advanced onboarding units.", category: "Advanced", reflectionTitle: "Reflection: Final onboarding check", reflectionBody: "Completed advanced units. Focusing on patience and non-judgmental presence.", reflectionStatus: "Approved", reflectionFeedback: "Great philosophy in practice." },
+        { name: "Elena Rostova", progress: 10, quizScore: "5/10", lastReflection: "Reading welcome modules.", category: "Basic", reflectionTitle: "Reflection: Starting modules", reflectionBody: "Starting to read welcome modules. Preparing for the first session.", reflectionStatus: "Pending", reflectionFeedback: "" },
+        { name: "Rahul Nair", progress: 45, quizScore: "8/10", lastReflection: "Practicing open dialoguing questions.", category: "Basic", reflectionTitle: "Reflection: Question style review", reflectionBody: "Practicing open dialoguing. The conversation was much more engaging than last time.", reflectionStatus: "Approved", reflectionFeedback: "Keep practicing dialoguing models." },
+        { name: "Aisha Khan", progress: 60, quizScore: "7/10", lastReflection: "Drafted my second reflection entry.", category: "Basic", reflectionTitle: "Reflection: Second session log", reflectionBody: "Drafted my second reflection log. Focus is on co-creating interest-driven pathways.", reflectionStatus: "Approved", reflectionFeedback: "Very structured reflection log." },
+        { name: "Vikram Sen", progress: 85, quizScore: "9/10", lastReflection: "Active listening session completed.", category: "Advanced", reflectionTitle: "Reflection: Active listening log", reflectionBody: "Active listening session was highly successful today. Used paraphrasing check-ins.", reflectionStatus: "Approved", reflectionFeedback: "Paraphrasing builds trust." },
+        { name: "Zoe Bennett", progress: 95, quizScore: "10/10", lastReflection: "Mapped career path suggestions.", category: "Advanced", reflectionTitle: "Reflection: Portfolio suggestions", reflectionBody: "Mapped career path suggestions for the child's visual graphics portfolio.", reflectionStatus: "Approved", reflectionFeedback: "Creative pathway is perfectly aligned." }
+      ],
+      
+      reflections: [
+        { id: 101, title: "Reflection: Session 1 Welcoming", date: "Aug 12, 2026", body: "Focus was on co-creating niches. Handled pauses well.", status: "Approved", feedback: "Strong start. Continue supporting pacing." },
+        { id: 102, title: "Reflection: Session 2 Listening", date: "Aug 15, 2026", body: "Practiced 3-5 second waiting rules after asking questions.", status: "Pending", feedback: "" }
+      ],
+      
+      modules: {
+        basic: [
+          {
+            id: 1,
+            title: "Module 1: Welcome & Code of Conduct",
+            completed: true,
+            units: [
+              { id: 11, title: "Unit 1: Welcoming a Child", body: "In this unit, we will cover how to establish initial trust and structure within a session. Learning Companions (LCs) must introduce themselves with active presence. Always ask open-ended questions like 'What would you like to build today?' instead of giving top-down directives." },
+              { id: 12, title: "Unit 2: Active Pacing", body: "Active pacing is critical. If a child remains silent, wait patiently for 3-5 seconds. Pauses are essential for children to formulate responses. Avoid breaking silence instantly with a fresh query, which can create pressure." }
+            ]
+          },
+          {
+            id: 2,
+            title: "Module 2: Interest-Driven Pathways",
+            completed: false,
+            units: [
+              { id: 21, title: "Unit 1: Co-creating Goals", body: "Learn to co-create creative learning pathways. Instead of imposing academic worksheets, work alongside the child's intrinsic motivators (such as digital painting, building circuits, or coding games). Ask: 'How does this connect to your art?'" },
+              { id: 22, title: "Unit 2: Documenting Strengths", body: "Learn to log positive feedback and highlight children's unique skills to program supervisors. Avoid cataloging checklist failures, focus heavily on strengths." }
+            ]
+          }
+        ],
+        advanced: [
+          {
+            id: 3,
+            title: "Module 3: Collaborative Dialogue Models",
+            completed: false,
+            units: [
+              { id: 31, title: "Unit 1: Non-Judgmental presence", body: "Advanced field practice requires listening to niche interests without showing personal academic bias. Provide structural avenues for self-direction." }
+            ]
+          }
+        ]
+      }
+    };
+
+    // User Accounts
+    const users = {
+      priya: { name: "Priya Sharma", email: "priya@imlc.org", role: 'companion', badge: 'Learning Companion', avatar: 'P' },
+      siddharth: { name: "Siddharth", email: "siddharth@imlc.org", role: 'mentor', badge: 'Program Supervisor', avatar: 'S' },
+      aditi: { name: "Aditi Sen", email: "aditi@imlc.org", role: 'author', badge: 'Content Author', avatar: 'A' }
+    };
+
+    // Global router controller
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      const target = document.getElementById(pageId);
+      if (target) target.classList.add("active");
+    }
+
+    function navigateTo(pageId) {
+      // Toggle top header visibility
+      const header = document.getElementById("app-header");
+      if (pageId === 'portal' || pageId === 'signup') {
+        header.classList.add("hidden");
+      } else {
+        header.classList.remove("hidden");
+      }
+      
+      // Update top-nav buttons active indicator class
+      document.querySelectorAll(".top-nav-btn").forEach(btn => {
+        btn.classList.remove("active");
+      });
+      const activeBtn = document.getElementById(`top-nav-${pageId}`);
+      if (activeBtn) activeBtn.classList.add("active");
+      
+      // Load page
+      if (pageId === 'portal' || pageId === 'signup') {
+        showPage(`${pageId}-view`);
+      } else {
+        showPage(`page-${pageId}`);
+      }
+      
+      // Trigger dynamic loads
+      if (pageId === 'dashboard') loadDashboard();
+      if (pageId === 'reader') loadReader();
+      if (pageId === 'quiz') startQuiz();
+      if (pageId === 'diary') loadDiary();
+      if (pageId === 'mentor') loadMentorRegistry();
+    }
+
+    // Role login handler
+    function loginAs(userId) {
+      const user = users[userId];
+      if (!user) return;
+      
+      appState.activeUser = userId;
+      appState.activeRole = user.role;
+      
+      // Update DOM labels
+      document.getElementById("user-name-label").textContent = user.name;
+      document.getElementById("user-role-badge").textContent = user.badge;
+      document.getElementById("user-avatar").textContent = user.name.charAt(0);
+      
+      // Toggle top-nav links visibility based on role
+      document.getElementById("top-nav-dashboard").classList.toggle("hidden", user.role !== 'companion');
+      document.getElementById("top-nav-reader").classList.toggle("hidden", user.role !== 'companion');
+      document.getElementById("top-nav-quiz").classList.toggle("hidden", user.role !== 'companion');
+      document.getElementById("top-nav-diary").classList.toggle("hidden", user.role !== 'companion');
+      document.getElementById("top-nav-mentor").classList.toggle("hidden", user.role !== 'mentor');
+      document.getElementById("top-nav-library").classList.toggle("hidden", user.role !== 'author');
+      
+      showToast(`Logged in successfully as ${user.name}`);
+      
+      if (user.role === 'companion') {
+        navigateTo('dashboard');
+      } else if (user.role === 'mentor') {
+        navigateTo('mentor');
+      } else if (user.role === 'author') {
+        navigateTo('library');
+      }
+    }
+
+    function logout() {
+      appState.activeUser = null;
+      navigateTo('portal');
+      showToast("Logged out successfully.");
+    }
+
+    // Toast alert helper
+    function showToast(text, isError = false) {
+      const toast = document.getElementById("toast");
+      const icon = document.getElementById("toast-icon");
+      const label = document.getElementById("toast-text");
+      
+      label.textContent = text;
+      icon.innerHTML = isError ? 
+        '<i data-lucide="alert-circle" class="w-5 h-5 text-red-400"></i>' : 
+        '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>';
+      
+      lucide.createIcons();
+      
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3000);
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      document.querySelectorAll(".dark-icon").forEach(icon => {
+        icon.setAttribute("data-lucide", isDark ? "sun" : "moon");
+      });
+      lucide.createIcons();
+      showToast(`Switched to ${isDark ? 'Dark' : 'Light'} Mode`);
+    }
+
+    // Signup Handler
+    function handleSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById("reg-name").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      
+      if (name && email) {
+        appState.companions.push({
+          name: name,
+          progress: 0,
+          quizScore: "0/10",
+          lastReflection: "Awaiting first field session.",
+          category: "Basic",
+          reflectionTitle: "First Reflection Log",
+          reflectionBody: "No reflections submitted yet.",
+          reflectionStatus: "Pending",
+          reflectionFeedback: ""
+        });
+        
+        showToast("Profile submitted! Awaiting mentor authorization.");
+        document.getElementById("reg-name").value = "";
+        document.getElementById("reg-email").value = "";
+        showPage("portal-view");
+      }
+    }
+
+    // Dashboard Controller (Udemy-Style Course Card Grid)
+    function loadDashboard() {
+      const gridContainer = document.getElementById("module-checklist-container");
+      gridContainer.innerHTML = "";
+      
+      const currentList = appState.modules[appState.activeTab];
+      currentList.forEach(mod => {
+        const card = document.createElement("div");
+        card.className = "glass-card rounded-2xl p-5 space-y-4 bg-white dark:bg-slate-800 flex flex-col justify-between hover:shadow-md transition border border-slate-200 dark:border-slate-700";
+        
+        const completedBadge = mod.completed ? 
+          `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/10 self-start">COMPLETED</span>` :
+          `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-900/10 self-start">ACTIVE TRACK</span>`;
+          
+        card.innerHTML = `
+          <div class="space-y-2 flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="text-xxs font-bold text-slate-400 uppercase">${appState.activeTab} Track</span>
+              ${completedBadge}
+            </div>
+            <h4 class="font-extrabold text-sm text-slate-800 dark:text-white leading-snug">${mod.title}</h4>
+            <p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">Contains ${mod.units.length} core reading units and practical field exercise notes.</p>
+          </div>
+          
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded-full flex items-center justify-center bg-slate-100 dark:bg-slate-700">
+                <i data-lucide="${mod.completed ? 'check' : 'play'}" class="w-2.5 h-2.5 text-slate-600 dark:text-slate-300"></i>
+              </span>
+              <span class="text-[10px] text-slate-400 font-semibold">${mod.completed ? 'Ready for review' : 'Study pending'}</span>
+            </div>
+            <button onclick="studyModule(${mod.id})" class="px-3.5 py-1.5 bg-sky-50 hover:bg-sky-100 dark:bg-sky-950 dark:hover:bg-sky-900 text-sky-600 dark:text-sky-400 text-xs font-bold rounded-lg transition">
+              ${mod.completed ? 'Review' : 'Start Lesson'}
+            </button>
+          </div>
+        `;
+        gridContainer.appendChild(card);
+      });
+      
+      // Calculate overall progress percent
+      const total = appState.modules.basic.length + appState.modules.advanced.length;
+      const completed = appState.modules.basic.filter(m => m.completed).length + appState.modules.advanced.filter(m => m.completed).length;
+      const pct = Math.round((completed / total) * 100);
+      
+      document.getElementById("progress-text").textContent = `${pct}%`;
+      document.getElementById("progress-description").textContent = `You have completed ${completed} out of ${total} modules.`;
+      
+      // Update SVG Stroke dash offset
+      const strokeVal = 377 - (377 * pct) / 100;
+      document.getElementById("progress-circle").setAttribute("stroke-dashoffset", strokeVal);
+      
+      // Load recent approved feedback
+      const approvedRef = appState.companions.find(c => c.reflectionStatus === 'Approved');
+      if (approvedRef) {
+        document.getElementById("dashboard-feedback-text").textContent = `"${approvedRef.reflectionBody.substring(0, 70)}..."`;
+        document.getElementById("dashboard-feedback-author").textContent = `— Siddharth (Mentor) on ${approvedRef.name}`;
+      }
+      
+      lucide.createIcons();
+    }
+
+    function setDashboardTab(tab) {
+      appState.activeTab = tab;
+      document.getElementById("tab-basic").className = tab === 'basic' ? 
+        "tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition" :
+        "tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition";
+      document.getElementById("tab-advanced").className = tab === 'advanced' ? 
+        "tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition" :
+        "tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition";
+      loadDashboard();
+    }
+
+    // Module Reader Controller
+    function studyModule(modId) {
+      let mod = appState.modules.basic.find(m => m.id === modId);
+      if (!mod) mod = appState.modules.advanced.find(m => m.id === modId);
+      if (mod && mod.units.length > 0) {
+        appState.selectedUnitId = mod.units[0].id;
+        navigateTo('reader');
+      }
+    }
+
+    function loadReader() {
+      let activeUnit = null;
+      let activeMod = null;
+      let isAdvanced = false;
+      
+      appState.modules.basic.forEach(m => {
+        const u = m.units.find(x => x.id === appState.selectedUnitId);
+        if (u) { activeUnit = u; activeMod = m; }
+      });
+      if (!activeUnit) {
+        appState.modules.advanced.forEach(m => {
+          const u = m.units.find(x => x.id === appState.selectedUnitId);
+          if (u) { activeUnit = u; activeMod = m; isAdvanced = true; }
+        });
+      }
+      
+      if (!activeUnit) return;
+      
+      document.getElementById("reader-unit-title").textContent = activeUnit.title;
+      document.getElementById("reader-unit-body").innerHTML = `<p>${activeUnit.body}</p>`;
+      document.getElementById("reader-module-category").textContent = isAdvanced ? "ADVANCED MODULE" : "BASIC MODULE";
+      
+      const linksContainer = document.getElementById("reader-unit-links");
+      linksContainer.innerHTML = "";
+      
+      activeMod.units.forEach(unit => {
+        const btn = document.createElement("button");
+        btn.onclick = () => {
+          appState.selectedUnitId = unit.id;
+          loadReader();
+        };
+        btn.className = `w-full text-left py-2.5 px-3 rounded-lg text-xs font-bold transition ${unit.id === appState.selectedUnitId ? 'bg-sky-50 dark:bg-sky-950/20 text-sky-700 dark:text-sky-400' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/30'}`;
+        btn.textContent = unit.title;
+        linksContainer.appendChild(btn);
+      });
+    }
+
+    // MULTI-QUESTION QUIZ ENGINE DATA & LOGIC
+    const quizQuestions = [
+      {
+        question: "What is the most supportive way to handle a silent pause from a child?",
+        options: [
+          { value: "a", text: "A. Quickly ask a different question to break the silence." },
+          { value: "b", text: "B. Stay silent for a few seconds to give them space to formulate thoughts." },
+          { value: "c", text: "C. End the session early because the child is not responding." }
+        ],
+        correct: "b",
+        explanation: "Correct! Staying silent for 3-5 seconds shows patience and allows the child to organize their ideas naturally."
+      },
+      {
+        question: "Which type of question is best suited for encouraging a child to share their niche interests?",
+        options: [
+          { value: "a", text: "A. Open-ended questions starting with 'What' or 'How'." },
+          { value: "b", text: "B. Closed-ended questions requiring a simple 'Yes' or 'No'." },
+          { value: "c", text: "C. Multiple-choice questions that limit their options." }
+        ],
+        correct: "a",
+        explanation: "Correct! Open questions encourage detailed descriptions, whereas closed questions yield brief one-word answers."
+      },
+      {
+        question: "If a child shares a strength in drawing, what is the primary role of the Learning Companion?",
+        options: [
+          { value: "a", text: "A. Teach them professional fine-art history lessons immediately." },
+          { value: "b", text: "B. Document the interest, encourage them, and help outline a creative pathway." },
+          { value: "c", text: "C. Direct their attention to core technical subjects instead." }
+        ],
+        correct: "b",
+        explanation: "Correct! Learning Companions nurture the child's intrinsic motivation by building custom learning pathways."
+      },
+      {
+        question: "Active listening as a Learning Companion involves which of the following?",
+        options: [
+          { value: "a", text: "A. Waiting patiently for your turn to explain your own experiences." },
+          { value: "b", text: "B. Paying full attention, observing body language, and paraphrasing check-ins." },
+          { value: "c", text: "C. Writing down instructions for the child's homework." }
+        ],
+        correct: "b",
+        explanation: "Correct! Active listening combines verbal paraphrasing and non-verbal presence to create trust."
+      },
+      {
+        question: "Who is the primary audience for the tracking and training modules in this system?",
+        options: [
+          { value: "a", text: "A. The child students who attend Spark sessions." },
+          { value: "b", text: "B. The client program sponsors and school coordinators." },
+          { value: "c", text: "C. The volunteer Learning Companions (LCs) undergoing training." }
+        ],
+        correct: "c",
+        explanation: "Correct! The application is designed to onboard and check the progress of the Learning Companions themselves."
+      }
+    ];
+
+    let currentQuestionIdx = 0;
+    let quizScore = 0;
+
+    function startQuiz() {
+      currentQuestionIdx = 0;
+      quizScore = 0;
+      document.getElementById("quiz-card").classList.remove("hidden");
+      document.getElementById("quiz-result-card").classList.add("hidden");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = quizQuestions[currentQuestionIdx];
+      const total = quizQuestions.length;
+      
+      document.getElementById("quiz-question-number").textContent = `Question ${currentQuestionIdx + 1} of ${total}`;
+      const progressPercent = Math.round(((currentQuestionIdx) / total) * 100);
+      document.getElementById("quiz-progress-text").textContent = `${progressPercent}% Complete`;
+      document.getElementById("quiz-progress-bar").style.width = `${progressPercent}%`;
+      document.getElementById("quiz-question-text").textContent = q.question;
+      
+      const optionsContainer = document.getElementById("quiz-options-container");
+      optionsContainer.innerHTML = "";
+      
+      q.options.forEach(opt => {
+        const label = document.createElement("label");
+        label.className = "flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-750 hover:border-sky-500 hover:bg-slate-50 dark:hover:bg-slate-700/40 cursor-pointer transition text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800";
+        label.innerHTML = `
+          <input type="radio" name="quiz-ans" value="${opt.value}" class="w-4 h-4 text-sky-600">
+          <span class="text-sm font-semibold">${opt.text}</span>
+        `;
+        optionsContainer.appendChild(label);
+      });
+      
+      document.getElementById("quiz-feedback").classList.add("hidden");
+      document.getElementById("quiz-submit-btn").classList.remove("hidden");
+      document.getElementById("quiz-next-btn").classList.add("hidden");
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="quiz-ans"]:checked');
+      const feedback = document.getElementById("quiz-feedback");
+      
+      if (!selected) {
+        feedback.className = "text-sm font-semibold text-amber-600 mt-3 block";
+        feedback.textContent = "Please select an answer option.";
+        feedback.classList.remove("hidden");
+        return;
+      }
+      
+      const q = quizQuestions[currentQuestionIdx];
+      feedback.classList.remove("hidden");
+      
+      document.querySelectorAll('input[name="quiz-ans"]').forEach(input => {
+        input.disabled = true;
+      });
+      
+      if (selected.value === q.correct) {
+        quizScore++;
+        feedback.className = "text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-3 block bg-emerald-50 dark:bg-emerald-950/20 p-3 rounded-xl";
+        feedback.textContent = q.explanation;
+      } else {
+        feedback.className = "text-xs font-semibold text-red-500 dark:text-red-400 mt-3 block bg-red-50 dark:bg-red-950/20 p-3 rounded-xl";
+        feedback.textContent = "Incorrect. " + q.explanation;
+      }
+      
+      document.getElementById("quiz-submit-btn").classList.add("hidden");
+      
+      const nextBtn = document.getElementById("quiz-next-btn");
+      if (currentQuestionIdx === quizQuestions.length - 1) {
+        nextBtn.innerHTML = `Finish Quiz <i data-lucide="award" class="w-4 h-4"></i>`;
+      } else {
+        nextBtn.innerHTML = `Next Question <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+      }
+      nextBtn.classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function nextQuestion() {
+      currentQuestionIdx++;
+      if (currentQuestionIdx < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("quiz-card").classList.add("hidden");
+        document.getElementById("quiz-result-card").classList.remove("hidden");
+        document.getElementById("quiz-final-score").textContent = `Score: ${quizScore} / ${quizQuestions.length}`;
+        
+        const priya = appState.companions.find(c => c.name === "Priya Sharma");
+        if (priya) {
+          priya.quizScore = `${quizScore}/5`;
+          appState.modules.basic[1].completed = true;
+        }
+      }
+    }
+
+    function restartQuiz() {
+      startQuiz();
+    }
+
+    // Reflection Diary Controller
+    function loadDiary() {
+      const list = document.getElementById("reflection-list");
+      list.innerHTML = "";
+      
+      appState.reflections.forEach(ref => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.onclick = () => loadReflectionToEditor(ref.id);
+        
+        const isSelected = ref.id === appState.selectedRefId;
+        const pillColor = ref.status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/10' : 'bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/10';
+        
+        card.className = `w-full text-left p-4 rounded-xl border text-sm transition ${isSelected ? 'bg-sky-50/40 border-sky-500' : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 bg-white dark:bg-slate-800'}`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-700 dark:text-slate-300 truncate">${ref.title}</span>
+            <span class="text-xxs px-2 py-0.5 rounded border ${pillColor}">${ref.status}</span>
+          </div>
+          <p class="text-xs text-slate-450 dark:text-slate-500 mt-1 truncate">${ref.body}</p>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function loadReflectionToEditor(refId) {
+      appState.selectedRefId = refId;
+      const ref = appState.reflections.find(r => r.id === refId);
+      if (ref) {
+        document.getElementById("ref-title").value = ref.title;
+        document.getElementById("ref-body").value = ref.body;
+      }
+      loadDiary();
+    }
+
+    function insertFormat(char) {
+      const editor = document.getElementById("ref-body");
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      const text = editor.value;
+      editor.value = text.substring(0, start) + char + text.substring(start, end) + char + text.substring(end);
+      editor.focus();
+    }
+
+    function handleSaveReflection(event) {
+      event.preventDefault();
+      const title = document.getElementById("ref-title").value.trim();
+      const body = document.getElementById("ref-body").value.trim();
+      
+      if (!title || !body) return;
+      
+      const existingIdx = appState.reflections.findIndex(r => r.id === appState.selectedRefId);
+      if (existingIdx !== -1 && appState.reflections[existingIdx].title === title) {
+        appState.reflections[existingIdx].body = body;
+        appState.reflections[existingIdx].status = "Pending";
+        showToast("Reflection log updated successfully!");
+      } else {
+        const newRef = {
+          id: Date.now(),
+          title: title,
+          date: "Today",
+          body: body,
+          status: "Pending",
+          feedback: ""
+        };
+        appState.reflections.unshift(newRef);
+        appState.selectedRefId = newRef.id;
+        showToast("New reflection logged!");
+      }
+      
+      document.getElementById("ref-title").value = "";
+      document.getElementById("ref-body").value = "";
+      loadDiary();
+    }
+
+    // Mentor Hub Controller
+    function loadMentorRegistry() {
+      document.getElementById("mentor-stat-active-companions").textContent = appState.companions.length;
+      const totalProgress = appState.companions.reduce((sum, c) => sum + c.progress, 0);
+      const avgProgress = Math.round(totalProgress / appState.companions.length);
+      document.getElementById("mentor-stat-average-progress").textContent = `${avgProgress}%`;
+      const pendingCount = appState.companions.filter(c => c.reflectionStatus === 'Pending').length;
+      document.getElementById("mentor-stat-unreviewed").textContent = pendingCount;
+
+      const body = document.getElementById("mentor-table-body");
+      body.innerHTML = "";
+      
+      appState.companions.forEach(t => {
+        const row = document.createElement("tr");
+        row.className = "border-t border-slate-100 dark:border-slate-700 hover:bg-slate-50/50 dark:hover:bg-slate-700/20";
+        row.innerHTML = `
+          <td class="py-4 px-6 font-bold text-slate-700 dark:text-slate-300">${t.name}</td>
+          <td class="py-4 w-48">
+            <div class="progress-track w-full dark:bg-slate-700">
+              <div class="progress-fill" style="width: ${t.progress}%;"></div>
+            </div>
+            <span class="text-xxs text-slate-400 dark:text-slate-550 mt-1 block">${t.progress}% Completed (${t.category})</span>
+          </td>
+          <td class="py-4 font-semibold text-slate-800 dark:text-slate-200">${t.quizScore}</td>
+          <td class="py-4 text-slate-450 dark:text-slate-500 italic truncate max-w-xs">"${t.lastReflection}"</td>
+          <td class="py-4 px-6 text-right">
+            <button onclick="openReviewModal('${t.name}')" class="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/40 flex items-center justify-center ml-auto">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </td>
+        `;
+        body.appendChild(row);
+      });
+      lucide.createIcons();
+    }
+
+    function filterRegistry(event) {
+      const val = event.target.value.toLowerCase();
+      const rows = document.querySelectorAll("#mentor-table-body tr");
+      rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        row.classList.toggle("hidden", !name.includes(val));
+      });
+    }
+
+    // Modal Review controller
+    let currentReviewingName = "";
+    function openReviewModal(lcName) {
+      currentReviewingName = lcName;
+      document.getElementById("modal-lc-name").textContent = `Review Journal: ${lcName}`;
+      
+      const companion = appState.companions.find(c => c.name === lcName);
+      
+      if (companion) {
+        document.getElementById("modal-ref-title").textContent = companion.reflectionTitle || "Field practice reflection";
+        document.getElementById("modal-ref-body").textContent = companion.reflectionBody || "No journal entry submitted.";
+        document.getElementById("modal-status").textContent = companion.reflectionStatus;
+        document.getElementById("modal-ref-date").textContent = "Today";
+        document.getElementById("modal-feedback-input").value = companion.reflectionFeedback || "";
+        
+        const statusPill = document.getElementById("modal-status");
+        if (companion.reflectionStatus === 'Approved') {
+          statusPill.className = "text-xxs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/10";
+        } else {
+          statusPill.className = "text-xxs font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400 border border-amber-100 dark:border-amber-900/10";
+        }
+      }
+      
+      document.getElementById("reflection-modal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("reflection-modal").classList.add("hidden");
+    }
+
+    function submitReview() {
+      const feedback = document.getElementById("modal-feedback-input").value.trim();
+      if (!feedback) {
+        showToast("Please provide review feedback comments.", true);
+        return;
+      }
+      
+      const companion = appState.companions.find(c => c.name === currentReviewingName);
+      if (companion) {
+        companion.reflectionStatus = "Approved";
+        companion.reflectionFeedback = feedback;
+        companion.lastReflection = companion.reflectionBody.substring(0, 40) + "...";
+      }
+      
+      showToast(`Review feedback sent to ${currentReviewingName}!`);
+      closeModal();
+      loadMentorRegistry();
+    }
+
+    // Content Uploader controller
+    function setUploadCategory(cat) {
+      appState.uploadCategory = cat;
+      document.getElementById("upload-basic-tab").className = cat === 'basic' ? 
+        "upload-tab px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition" :
+        "upload-tab px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition";
+      document.getElementById("upload-advanced-tab").className = cat === 'advanced' ? 
+        "upload-tab px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition" :
+        "upload-tab px-4 py-2 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 transition";
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById("upload-file-label").textContent = `Selected: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      }
+    }
+
+    function handlePublishModule(event) {
+      event.preventDefault();
+      const title = document.getElementById("up-title").value.trim();
+      const body = document.getElementById("up-body").value.trim();
+      
+      if (!title || !body) return;
+      
+      const newMod = {
+        id: Date.now(),
+        title: title,
+        completed: false,
+        units: [
+          { id: Date.now() + 1, title: `Unit 1: ${title.split(':').pop().trim()}`, body: body }
+        ]
+      };
+      
+      appState.modules[appState.uploadCategory].push(newMod);
+      showToast(`Module published successfully to ${appState.uploadCategory} category!`);
+      
+      document.getElementById("up-title").value = "";
+      document.getElementById("up-body").value = "";
+      document.getElementById("upload-file-label").textContent = "Drag and drop file here (Max 50MB)";
+    }
+
+    // Generate Lucide icons immediately when the DOM content is parsed on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      // Load default screen
+      navigateTo('portal');
+    });
+  </script>
+</body>
+</html>
