@@ -882,7 +882,7 @@
     // Robust lucide loader helper
     function safeCreateIcons() {
       if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
-        safeCreateIcons();
+        lucide.createIcons();
       }
     }
 
