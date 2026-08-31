@@ -28,7 +28,7 @@ export default function Layout({ children }) {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand dark:bg-indigo-600 text-white shadow-md shadow-brand/10 dark:shadow-none">
               <BookOpen size={18} />
             </span>
-            <span>LearnLog</span>
+            <span>Learning Companion Studio</span>
           </Link>
           
           <nav className="flex items-center gap-3">
@@ -74,7 +74,7 @@ export default function Layout({ children }) {
 
       <footer className="border-t border-slate-100 dark:border-slate-900 bg-white dark:bg-slate-950/40 py-6 text-center text-xs text-slate-400 dark:text-slate-600">
         <div className="mx-auto max-w-6xl px-5">
-          <p>© {new Date().getFullYear()} LearnLog Learning Platform & Event Logging Pipeline.</p>
+          <p>© {new Date().getFullYear()} Learning Companion Studio & Training Platform.</p>
         </div>
       </footer>
     </div>

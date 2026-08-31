@@ -5,8 +5,8 @@ import Course from '../models/Course.js';
 
 await connectDatabase();
 await Promise.all([User.deleteMany(), Course.deleteMany()]);
-const admin = await User.create({ name: 'Platform Admin', email: 'admin@learnlog.local', passwordHash: await User.hashPassword('AdminPass123!'), role: 'admin' });
-const learner = await User.create({ name: 'Harvey Learner', email: 'harvey@learnlog.local', passwordHash: await User.hashPassword('LearnerPass123!') });
+const admin = await User.create({ name: 'Platform Admin', email: 'admin@learningcompanion.studio', passwordHash: await User.hashPassword('AdminPass123!'), role: 'admin' });
+const learner = await User.create({ name: 'Harvey Learner', email: 'companion@learningcompanion.studio', passwordHash: await User.hashPassword('LearnerPass123!') });
 
 const coursesData = [
   {

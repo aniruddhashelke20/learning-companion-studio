@@ -30,7 +30,7 @@ export default function AuthPage({ register = false }) {
             <BookOpen size={20} />
           </span>
           <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-            LearnLog
+            Learning Companion Studio
           </span>
         </div>
         
@@ -67,7 +67,7 @@ export default function AuthPage({ register = false }) {
             <input
               required
               type="email"
-              placeholder="harvey@learnlog.local"
+              placeholder="companion@learningcompanion.studio"
               className="mt-1.5 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/30 dark:focus:ring-indigo-500/30 focus:border-brand dark:focus:border-indigo-500 transition-all"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -93,7 +93,7 @@ export default function AuthPage({ register = false }) {
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-          {register ? 'Already have an account?' : 'New to LearnLog?'} {' '}
+          {register ? 'Already have an account?' : 'New to Learning Companion Studio?'} {' '}
           <Link
             className="font-semibold text-brand dark:text-indigo-400 hover:underline"
             to={register ? '/login' : '/register'}
