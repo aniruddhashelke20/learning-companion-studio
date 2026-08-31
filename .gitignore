@@ -6,3 +6,27 @@ dist/
 coverage/
 .DS_Store
 
+
+# Ignore academic lab reports
+work/
+
+# Exclude legacy presentation assets and standalone HTML prototypes
+outputs/
+presentation.html
+google_sheets_setup.md
+docs/PRESENTATION_OUTLINE.md
+docs/DEMO_SCRIPT.md
+docs/COMMIT_PLAN.md
+docs/*Learning_Companion_Studio*.html
+client/public/*Learning_Companion_Studio*.html
+
+# Ignore legacy meeting minutes and markdown versions of docs
+docs/Weekly_Meeting_Minutes_MoM_Aug_14.*
+docs/Weekly_Meeting_Minutes_MoM_Aug_21.md
+docs/Weekly_Meeting_Minutes_MoM_Aug_28.md
+docs/HLD_Document_and_Contract.md
+
+# Ignore root level monorepo setup configurations
+package.json
+package-lock.json
+docker-compose.yml

@@ -1,28 +1,23 @@
-# LearnLog
+# Learning Companion Studio
 
-LearnLog is a full-stack learning platform built for a clickstream analytics assignment. It pairs a learner-facing course experience with Moodle-style event logging and an administrator analytics dashboard.
+A comprehensive, learner-centric training and curriculum management platform designed for the **InclusiveMinds Learning Collective (IMLC)**. Built to support the Learner-Centric MOOC (LCM) framework, the platform integrates an interactive volunteer training companion with a dynamic course authoring environment.
 
-## What it demonstrates
+---
 
-- JWT authentication with learner and administrator roles
-- Course and lesson experience with automatic course/module/scroll/video events
-- Server-scored quizzes and recorded attempts
-- A normalized activity log with Moodle-inspired fields: event name, component, context, origin, description, resource and timestamp
-- Admin dashboard for learner count, daily activity, average score, common events, and recent log entries
+## Key Features
 
-## Stack
+* **Learner-Centric MOOC (LCM) Model:** Full integration of LCM pedagogic components:
+  * **LeD (Learning Dialogue):** Video/text concept segments followed by active reflection checkpoints.
+  * **LbD (Learning by Doing):** Interactive MCQs with custom feedbacks and subjective self-assessment prompts.
+  * **LxT (Learning Extension Trajectories):** Resource pathways for advanced visual or sensory materials.
+  * **LxI (Learner Experience Interaction):** Weekly focus prompts for peer discussion and collaborative learning.
+* **Creator / Authoring Desk:** A dynamic dashboard allowing course designers to upload courseware, configure questions, write exemplar feedback, and instantly publish updates.
+* **Integrated Workspace:** Contains development server configurations and pilot test documentation.
 
-React + Vite + Tailwind CSS · Node.js + Express · MongoDB + Mongoose · JWT · Recharts
+---
 
-## Login Details
+## Directory Structure
 
-| Role | Email | Password |
-| --- | --- | --- |
-| Administrator | `admin@learnlog.local` | `AdminPass123!` |
-| Learner | `harvey@learnlog.local` | `LearnerPass123!` |
-
-## Event model
-
-Events are created automatically for registration, log-in, course views, lesson views, quiz starts, and submissions. The browser also sends controlled tracking events for dashboard visits, lesson scrolling, and video interaction. The server validates browser event names; score calculation and quiz submission tracking always happen on the server.
-
-If Docker is not available, use MongoDB Atlas and update `MONGODB_URI` in `server/.env`.
+* [`client/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/client) — React + Vite frontend for companions and creators.
+* [`server/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/server) — Node.js + Express backend service.
+* [`docs/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/docs) — Project meeting minutes and agendas.
