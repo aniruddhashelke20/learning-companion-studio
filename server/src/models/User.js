@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true, maxlength: 80 },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true, select: false },
-  role: { type: String, enum: ['learner', 'admin'], default: 'learner' }
+  role: { type: String, enum: ['learner', 'author', 'admin'], default: 'learner' }
 }, { timestamps: true });
 
 userSchema.methods.verifyPassword = function (password) { return bcrypt.compare(password, this.passwordHash); };

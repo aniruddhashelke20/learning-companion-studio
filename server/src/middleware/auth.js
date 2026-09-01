@@ -16,3 +16,8 @@ export function adminOnly(req, res, next) {
   if (req.user.role !== 'admin') return res.status(403).json({ message: 'Administrator access required.' });
   next();
 }
+
+export function authorOnly(req, res, next) {
+  if (req.user.role !== 'author' && req.user.role !== 'admin') return res.status(403).json({ message: 'Author access required.' });
+  next();
+}

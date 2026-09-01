@@ -1,23 +1,53 @@
 # Learning Companion Studio
 
-A comprehensive, learner-centric training and curriculum management platform designed for the **InclusiveMinds Learning Collective (IMLC)**. Built to support the Learner-Centric MOOC (LCM) framework, the platform integrates an interactive volunteer training companion with a dynamic course authoring environment.
+A learner-centric training and curriculum platform for the **InclusiveMinds Learning Collective (IMLC)**. It pairs an interactive Learning Companion (LC) training interface with a Creator/Authoring Desk, both built on the **Learner-Centric MOOC (LCM)** framework ([lcm-model.org](https://lcm-model.org/)).
 
 ---
 
 ## Key Features
 
-* **Learner-Centric MOOC (LCM) Model:** Full integration of LCM pedagogic components:
-  * **LeD (Learning Dialogue):** Video/text concept segments followed by active reflection checkpoints.
-  * **LbD (Learning by Doing):** Interactive MCQs with custom feedbacks and subjective self-assessment prompts.
-  * **LxT (Learning Extension Trajectories):** Resource pathways for advanced visual or sensory materials.
-  * **LxI (Learner Experience Interaction):** Weekly focus prompts for peer discussion and collaborative learning.
-* **Creator / Authoring Desk:** A dynamic dashboard allowing course designers to upload courseware, configure questions, write exemplar feedback, and instantly publish updates.
-* **Integrated Workspace:** Contains development server configurations and pilot test documentation.
+### LCM model — in both interfaces
+
+Every lesson carries the four LCM pedagogic components, configured by the author and rendered interactively for the companion:
+
+* **LeD (Learning Dialogue):** concept video/text segments punctuated by *reflection spots* — strategic pauses where the companion writes down their thinking before continuing.
+* **LbD (Learning by Doing):** ungraded MCQs where **every option has authored feedback**, plus subjective prompts answered first and then compared against the author's **exemplar response**.
+* **LxT (Learning Extension Trajectories):** curated resource pathways (worksheets, videos, articles, tools) tagged by type.
+* **LxI (Learner Experience Interaction):** weekly focus prompts for peer discussion across the companion cohort.
+
+### Creator / Authoring Desk (`/studio`)
+
+Authors (role `author`) create courses and configure every LCM element through simple forms — LeD reflection spots, LbD options + per-option feedback, subjective exemplars, LxT resources, LxI prompts, and the graded review quiz. Draft/publish workflow controls visibility.
+
+### Live integration
+
+Both interfaces share one API and database: when the author saves or publishes, the Learning Companion interface loads the update on the next page view — no redeploys, no hardcoded files. All companion interactions (reflections, LbD attempts, resource opens, quiz submissions) are logged to the clickstream analytics for mentors.
 
 ---
 
 ## Directory Structure
 
-* [`client/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/client) — React + Vite frontend for companions and creators.
-* [`server/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/server) — Node.js + Express backend service.
-* [`docs/`](file:///Users/rushilbhat/Documents/Codex/2026-08-04/referenced-chatgpt-conversation-this-is-an/docs) — Project meeting minutes and agendas.
+* `client/` — React + Vite frontend (companion interface + authoring desk).
+* `server/` — Node.js + Express + MongoDB backend.
+* `docs/` — HLD, contract, and weekly meeting minutes.
+
+## Running Locally
+
+No MongoDB install needed — without a `MONGODB_URI` the server boots an in-memory database and seeds it automatically (data resets on restart).
+
+```bash
+cd server && npm install && npm run dev   # API on http://localhost:5050
+cd client && npm install && npm run dev   # app on http://localhost:5173
+```
+
+Demo accounts (seeded):
+
+| Role | Email | Password |
+|---|---|---|
+| Content Author | `author@learningcompanion.studio` | `AuthorPass123!` |
+| Learning Companion | `companion@learningcompanion.studio` | `LearnerPass123!` |
+| Admin / Mentor | `admin@learningcompanion.studio` | `AdminPass123!` |
+
+## Deployment
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) — MongoDB Atlas + Render (API, via `render.yaml`) + Vercel (client).

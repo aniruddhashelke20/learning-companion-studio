@@ -67,6 +67,11 @@ export default function Dashboard() {
                   <span className="inline-flex rounded-full bg-brand/5 dark:bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-brand dark:text-indigo-400 uppercase tracking-wider">
                     {course.level}
                   </span>
+                  {course.status === 'draft' && (
+                    <span className="ml-2 inline-flex rounded-full bg-amber-50 dark:bg-amber-950/40 px-2.5 py-0.5 text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                      Draft
+                    </span>
+                  )}
                   <h3 className="mt-4 text-lg font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-brand dark:group-hover:text-indigo-400 transition-colors">
                     {course.title}
                   </h3>

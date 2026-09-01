@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { BookOpen, BarChart3, LogOut, Sun, Moon } from 'lucide-react';
+import { BookOpen, BarChart3, LogOut, Sun, Moon, PenSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -36,6 +36,13 @@ export default function Layout({ children }) {
               Dashboard
             </NavLink>
             
+            {(user?.role === 'author' || user?.role === 'admin') && (
+              <NavLink to="/studio" className={navLinkClass}>
+                <PenSquare size={15} />
+                <span>Authoring Desk</span>
+              </NavLink>
+            )}
+
             {user?.role === 'admin' && (
               <NavLink to="/analytics" className={navLinkClass}>
                 <BarChart3 size={15} />

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Play, AlertCircle, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { MessageCircleQuestion, Compass, Users } from 'lucide-react';
 import api, { track } from '../api';
 import Layout from '../components/Layout';
+import { LcmSectionHeader, ReflectionSpot, LbdQuestion, SubjectivePrompt, LxtResources, LxiPrompt } from '../components/LcmBlocks';
 
 export default function Lesson() {
   const { courseId, lessonId } = useParams();
@@ -249,9 +251,15 @@ export default function Lesson() {
               </p>
             </header>
 
-            {/* Video container */}
+            {/* LeD: concept video segment */}
             {lesson.videoUrl && (
-              <div className="my-8 overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-900 shadow-md">
+              <span className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+                <Play size={12} />
+                LeD · Learning Dialogue
+              </span>
+            )}
+            {lesson.videoUrl && (
+              <div className="mt-3 mb-8 overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-900 shadow-md">
                 {lesson.videoUrl.includes('youtube.com') || lesson.videoUrl.includes('youtu.be') ? (
                   <iframe
                     id="youtube-player"
@@ -283,6 +291,15 @@ export default function Lesson() {
               </div>
             )}
 
+            {/* LeD: Reflection spots paired with the concept video */}
+            {lesson.reflectionSpots?.length > 0 && (
+              <div className="my-6 space-y-4">
+                {lesson.reflectionSpots.map((spot, i) => (
+                  <ReflectionSpot key={spot._id || i} spot={spot} index={i} lesson={lesson} lessonId={lessonId} />
+                ))}
+              </div>
+            )}
+
             <hr className="my-8 border-slate-100 dark:border-slate-800" />
 
             {/* Text Lesson Content */}
@@ -291,6 +308,59 @@ export default function Lesson() {
                 {lesson.content}
               </p>
             </div>
+
+            {/* LbD: ungraded practice with authored per-option feedback */}
+            {(lesson.lbdQuestions?.length > 0 || lesson.subjectivePrompts?.length > 0) && (
+              <section className="mt-10">
+                <LcmSectionHeader
+                  icon={MessageCircleQuestion}
+                  tag="LbD · Learning by Doing"
+                  tagColor="bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
+                  title="Practice what you just learned"
+                  subtitle="Ungraded activities with instant feedback written by the course author."
+                />
+                <div className="space-y-4">
+                  {lesson.lbdQuestions?.map((question, i) => (
+                    <LbdQuestion key={question._id || i} question={question} index={i} lesson={lesson} lessonId={lessonId} />
+                  ))}
+                  {lesson.subjectivePrompts?.map((prompt, i) => (
+                    <SubjectivePrompt key={prompt._id || i} prompt={prompt} index={i} lesson={lesson} lessonId={lessonId} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* LxT: extension resource pathways */}
+            {lesson.resources?.length > 0 && (
+              <section className="mt-10">
+                <LcmSectionHeader
+                  icon={Compass}
+                  tag="LxT · Learning Extension Trajectories"
+                  tagColor="bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400"
+                  title="Go further on your own trajectory"
+                  subtitle="Optional resources curated by the course author for your niche and pace."
+                />
+                <LxtResources resources={lesson.resources} lesson={lesson} lessonId={lessonId} />
+              </section>
+            )}
+
+            {/* LxI: peer interaction focus prompts */}
+            {lesson.discussionPrompts?.length > 0 && (
+              <section className="mt-10">
+                <LcmSectionHeader
+                  icon={Users}
+                  tag="LxI · Learner Experience Interaction"
+                  tagColor="bg-violet-50 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400"
+                  title="Connect with your cohort"
+                  subtitle="This week's focus question for peer discussion."
+                />
+                <div className="space-y-4">
+                  {lesson.discussionPrompts.map((prompt, i) => (
+                    <LxiPrompt key={prompt._id || i} prompt={prompt} index={i} lesson={lesson} lessonId={lessonId} />
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Navigation buttons at bottom of lesson */}
             <footer className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-4">

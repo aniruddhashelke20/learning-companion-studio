@@ -17,7 +17,12 @@ const allowed = new Set([
   'QUIZ_OPTION_SELECTED',
   'THEME_TOGGLED',
   'EXPORT_CLICKED',
-  'LEARNER_LOG_VIEWED'
+  'LEARNER_LOG_VIEWED',
+  'LED_REFLECTION_SUBMITTED',
+  'LBD_OPTION_SELECTED',
+  'LBD_SUBJECTIVE_SUBMITTED',
+  'LXT_RESOURCE_OPENED',
+  'LXI_PROMPT_RESPONDED'
 ]);
 
 router.post('/', protect, async (req, res, next) => {
